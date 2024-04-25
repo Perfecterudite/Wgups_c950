@@ -1,4 +1,4 @@
-# Create class for freight trucks
+# Create class for delivery trucks
 class Truck:
     def __init__(self, capacity, speed, load, packages, mileage, address, depart_time):
         self.capacity = capacity

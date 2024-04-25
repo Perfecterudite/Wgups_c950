@@ -16,7 +16,7 @@ class MyHashTable:
 
         # update key if it is already in the bucket
         for ky in bucket_list:
-            #print (key_value)
+            # print (key_value)
             if ky[0] == key:
                 ky[1] = item
                 return True

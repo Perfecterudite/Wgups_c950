@@ -6,66 +6,73 @@
 import csv
 import datetime
 import truck
+import package
+from truck import Truck
 from builtins import ValueError
 from hashTable import MyHashTable
 from package import Package
 
 
 # Read the file of distance information
-with open("./Csv_files/distance_data.csv") as csvfile:
-    Csv_files_distance = csv.reader(csvfile)
-    Csv_files_distance = list(Csv_files_distance)
+with open("Csv_files/distance_data.csv") as csvfile:
+    Csv_distance = csv.reader(csvfile)
+    Csv_distance = list(Csv_distance)
 
 # Read the file of address information
-with open("./Csv_files/distance_name.csv") as csvfile1:
-    Csv_files_address = csv.reader(csvfile1)
-    Csv_files_address = list(Csv_files_address)
+with open("Csv_files/distance_name.csv") as csvfile1:
+    Csv_address = csv.reader(csvfile1)
+    Csv_address = list(Csv_address)
 
 # Read the file of package information
-with open("./Csv_files/packages.csv") as csvfile2:
-    Csv_files_package = csv.reader(csvfile2)
-    Csv_files_package = list(Csv_files_package)
-
+with open("Csv_files/packages.csv") as csvfile2:
+    Csv_package = csv.reader(csvfile2)
+    Csv_package = list(Csv_package)
 
 
 # Create package objects from the CSV package file
 # Load package objects into the hash table: package_hash_table
-def load_package_data(filename, package_hash_table):
-    with open(filename) as package_info:
-        package_data = csv.reader(package_info)
-        for package in package_data:
-            pID = int(package[0])
+
+# Create hash table
+# package_hash_table = MyHashTable()
+def load_package_data(filename):
+    with open(filename) as packages:
+        packageData = csv.reader(packages, delimiter=',')
+        next(packageData)
+        for package in packageData:
+           # pID = int(package[0])
+            pID = package[1]
             pAddress = package[1]
             pCity = package[2]
             pState = package[3]
             pZipcode = package[4]
             pDeadline_time = package[5]
             pWeight = package[6]
-            pStatus = "At Hub"
+            pStatus = "At the Hub"
+
 
             # Package object
             p = Package(pID, pAddress, pCity, pState, pZipcode, pDeadline_time, pWeight, pStatus)
 
             # Insert data into hash table
-            package_hash_table.insert(pID, p)
-
+            myPackage_hash_table.insert(pID, p)
+# Create hash table
+myPackage_hash_table = MyHashTable()
 
 
 # Method for finding distance between two addresses
 def distance_in_between(x_value, y_value):
-    distance = Csv_files_distance[x_value][y_value]
+    distance = Csv_distance[x_value][y_value]
     if distance == '':
-        distance = Csv_files_distance[y_value][x_value]
+        distance = Csv_distance[y_value][x_value]
 
     return float(distance)
 
 
 # Method to get address number from string literal of address
 def extract_address(address):
-    for row in Csv_files_address:
+    for row in Csv_address:
         if address in row[2]:
             return int(row[0])
-
 
 
 # Create truck object truck1
@@ -80,48 +87,44 @@ truck2 = truck.Truck(16, 18, None, [3, 6, 12, 17, 18, 19, 21, 22, 23, 24, 26, 27
 truck3 = truck.Truck(16, 18, None, [2, 4, 5, 6, 7, 8, 9, 10, 11, 25, 28, 32, 33], 0.0, "4001 South 700 East",
                      datetime.timedelta(hours=9, minutes=5))
 
-# Create hash table
-package_hash_table = MyHashTable()
 
 # Load packages into hash table
-load_package_data("Csv_files/packages.csv", package_hash_table)
-
-
+load_package_data("Csv_files/packages.csv")
 
 
 # Method for ordering packages on a given truck using the nearest neighbor algo
 # This method also calculates the distance a given truck drives once the packages are sorted
-def delivering_packages(truck):
+def delivering_packages(trucks):
     # Place all packages into array of not delivered
     not_delivered = []
-    for packageID in truck.packages:
-        package = package_hash_table.lookup(packageID)
-        not_delivered.append(package)
+    for packageID in trucks.packages:
+        packs = myPackage_hash_table.lookup(packageID)
+        not_delivered.append(packs)
     # Clear the package list of a given truck so the packages can be placed back into the truck in the order
     # of the nearest neighbor
-    truck.packages.clear()
+    trucks.packages.clear()
 
     # Cycle through the list of not_delivered until none remain in the list
-    # Adds the nearest package into the truck.packages list one by one
+    # Adds the nearest package into the trucks.packages list one by one
     while len(not_delivered) > 0:
         next_address = 2000
         next_package = None
-        for package in not_delivered:
-            if distance_in_between(extract_address(truck.address), extract_address(package.address)) <= next_address:
-                next_address = distance_in_between(extract_address(truck.address), extract_address(package.address))
-                next_package = package
+        for dpackage in not_delivered:
+            if distance_in_between(extract_address(trucks.address), extract_address(dpackage.address)) <= next_address:
+                next_address = distance_in_between(extract_address(trucks.address), extract_address(dpackage.address))
+                next_package = dpackage
         # Adds next closest package to the truck package list
-        truck.packages.append(next_package.ID)
+        trucks.packages.append(next_package.ID)
         # Removes the same package from the not_delivered list
         not_delivered.remove(next_package)
         # Takes the mileage driven to this packaged into the truck.mileage attribute
-        truck.mileage += next_address
+        trucks.mileage += next_address
         # Updates truck's current address attribute to the package it drove to
         truck.address = next_package.address
         # Updates the time it took for the truck to drive to the nearest package
-        truck.time += datetime.timedelta(hours=next_address / 18)
-        next_package.delivery_time = truck.time
-        next_package.departure_time = truck.depart_time
+        trucks.time += datetime.timedelta(hours=next_address / 18)
+        next_package.delivery_time = trucks.time
+        next_package.departure_time = trucks.depart_time
 
 
 # Put the trucks through the loading process
@@ -156,7 +159,7 @@ class Main:
                 try:
                     # The user will be asked to input a package ID. Invalid entry will cause the program to quit
                     solo_input = input("Enter the numeric package ID")
-                    package = package_hash_table.lookup(int(solo_input))
+                    package = myPackage_hash_table.lookup(int(solo_input))
                     package.update_status(convert_timedelta)
                     print(str(package))
                 except ValueError:
@@ -166,7 +169,7 @@ class Main:
             elif second_input == "all":
                 try:
                     for packageID in range(1, 41):
-                        package = package_hash_table.lookup(packageID)
+                        package = myPackage_hash_table.lookup(packageID)
                         package.update_status(convert_timedelta)
                         print(str(package))
                 except ValueError:
