@@ -14,17 +14,23 @@ from package import Package
 
 
 # Read the file of distance information
-with open("Csv_files/distance_data.csv") as csvfile:
+with open("Csv_files/distanceCSV.csv") as csvfile:
     Csv_distance = csv.reader(csvfile)
     Csv_distance = list(Csv_distance)
+#print(Csv_distance)
 
 # Read the file of address information
-with open("Csv_files/distance_name.csv") as csvfile1:
+with open("Csv_files/addressCSV.csv") as csvfile1:
     Csv_address = csv.reader(csvfile1)
     Csv_address = list(Csv_address)
+#print(Csv_address)
+addressList = []
+for x in Csv_address:
+    addressList.append(x[2])
+#print(addressList)
 
 # Read the file of package information
-with open("Csv_files/packages.csv") as csvfile2:
+with open("Csv_files/packageCSV.csv") as csvfile2:
     Csv_package = csv.reader(csvfile2)
     Csv_package = list(Csv_package)
 
@@ -33,14 +39,14 @@ with open("Csv_files/packages.csv") as csvfile2:
 # Load package objects into the hash table: package_hash_table
 
 # Create hash table
-# package_hash_table = MyHashTable()
+#myPackage_hash_table = MyHashTable()
 def load_package_data(filename):
-    with open(filename) as packages:
-        packageData = csv.reader(packages, delimiter=',')
-        next(packageData)
+    with open(filename) as packages_detail:
+        packageData = csv.reader(packages_detail, delimiter=',')
+        # next(packageData)
         for package in packageData:
-           # pID = int(package[0])
-            pID = package[1]
+            pID = int(package[0])
+            # pID = package[1]
             pAddress = package[1]
             pCity = package[2]
             pState = package[3]
@@ -58,21 +64,23 @@ def load_package_data(filename):
 # Create hash table
 myPackage_hash_table = MyHashTable()
 
-
 # Method for finding distance between two addresses
-def distance_in_between(x_value, y_value):
-    distance = Csv_distance[x_value][y_value]
-    if distance == '':
-        distance = Csv_distance[y_value][x_value]
 
+
+def distance_in_between(x_value, y_value):
+    # List indices
+    I = addressList.index(x_value)
+    J = addressList.index(y_value)
+    distance = Csv_distance[I][J]
+    if distance == '':
+        distance = Csv_distance[J][I]
     return float(distance)
 
 
 # Method to get address number from string literal of address
 def extract_address(address):
     for row in Csv_address:
-        if address in row[2]:
-            return int(row[0])
+        return row[2]
 
 
 # Create truck object truck1
@@ -89,7 +97,12 @@ truck3 = truck.Truck(16, 18, None, [2, 4, 5, 6, 7, 8, 9, 10, 11, 25, 28, 32, 33]
 
 
 # Load packages into hash table
-load_package_data("Csv_files/packages.csv")
+load_package_data("Csv_files/packageCSV.csv")
+
+
+# Get package address data -> O(n)
+# def get_address():
+#    return Csv_address
 
 
 # Method for ordering packages on a given truck using the nearest neighbor algo
@@ -99,22 +112,25 @@ def delivering_packages(trucks):
     not_delivered = []
     for packageID in trucks.packages:
         packs = myPackage_hash_table.lookup(packageID)
+        print(packs)
         not_delivered.append(packs)
     # Clear the package list of a given truck so the packages can be placed back into the truck in the order
     # of the nearest neighbor
     trucks.packages.clear()
 
-    # Cycle through the list of not_delivered until none remain in the list
+    # Goes through the list of not_delivered until there is none remaining in the list
     # Adds the nearest package into the trucks.packages list one by one
     while len(not_delivered) > 0:
         next_address = 2000
         next_package = None
         for dpackage in not_delivered:
+            # int(dpackage or 0)
             if distance_in_between(extract_address(trucks.address), extract_address(dpackage.address)) <= next_address:
                 next_address = distance_in_between(extract_address(trucks.address), extract_address(dpackage.address))
                 next_package = dpackage
+
         # Adds next closest package to the truck package list
-        trucks.packages.append(next_package.ID)
+        trucks.packages.append(next_package.id)
         # Removes the same package from the not_delivered list
         not_delivered.remove(next_package)
         # Takes the mileage driven to this packaged into the truck.mileage attribute
@@ -143,7 +159,7 @@ class Main:
     print("The mileage for the route is:")
     print(truck1.mileage + truck2.mileage + truck3.mileage)  # Print total mileage for all trucks
     # The user will be asked to start the process by entering the word "time"
-    text = input("To start please type the word 'time' (All else will cause the program to quit).")
+    text = input("To start please input the word 'time' then click enter (Wrong input will cause the program to quit).")
     # If the user doesn't type "leave" the program will ask for a specific time in regard to checking packages
     if text == "time":
         try:
