@@ -6,20 +6,18 @@
 import csv
 import datetime
 import truck
-import package
-from truck import Truck
 from builtins import ValueError
 from hashTable import MyHashTable
 from package import Package
 
 
-# Read the file of distance information
+# Read the file of csv distance information
 with open("Csv_files/distanceCSV.csv") as csvfile:
     Csv_distance = csv.reader(csvfile)
     Csv_distance = list(Csv_distance)
 #print(Csv_distance)
 
-# Read the file of address information
+# Read the file of csv address information
 with open("Csv_files/addressCSV.csv") as csvfile1:
     Csv_address = csv.reader(csvfile1)
     Csv_address = list(Csv_address)
@@ -29,7 +27,7 @@ for x in Csv_address:
     addressList.append(x[2])
 #print(addressList)
 
-# Read the file of package information
+# Read the file of csv package information
 with open("Csv_files/packageCSV.csv") as csvfile2:
     Csv_package = csv.reader(csvfile2)
     Csv_package = list(Csv_package)
@@ -37,9 +35,6 @@ with open("Csv_files/packageCSV.csv") as csvfile2:
 
 # Create package objects from the CSV package file
 # Load package objects into the hash table: package_hash_table
-
-# Create hash table
-#myPackage_hash_table = MyHashTable()
 def load_package_data(filename):
     with open(filename) as packages_detail:
         packageData = csv.reader(packages_detail, delimiter=',')
@@ -78,7 +73,7 @@ def distance_in_between(x_value, y_value):
 
 
 # Method to get address number from string literal of address
-def extract_address(address):
+def retrieve_address(address):
     for row in Csv_address:
         return row[2]
 
@@ -101,18 +96,16 @@ load_package_data("Csv_files/packageCSV.csv")
 
 
 # Get package address data -> O(n)
-# def get_address():
-#    return Csv_address
 
 
-# Method for ordering packages on a given truck using the nearest neighbor algo
+# Method for ordering packages on a given truck using the nearest neighbor algorithm
 # This method also calculates the distance a given truck drives once the packages are sorted
 def delivering_packages(trucks):
-    # Place all packages into array of not delivered
+    # Places all packages into array of not delivered
     not_delivered = []
     for packageID in trucks.packages:
         packs = myPackage_hash_table.lookup(packageID)
-        print(packs)
+        #print(packs)
         not_delivered.append(packs)
     # Clear the package list of a given truck so the packages can be placed back into the truck in the order
     # of the nearest neighbor
@@ -121,19 +114,19 @@ def delivering_packages(trucks):
     # Goes through the list of not_delivered until there is none remaining in the list
     # Adds the nearest package into the trucks.packages list one by one
     while len(not_delivered) > 0:
-        next_address = 2000
+        next_address = float('inf')
         next_package = None
         for dpackage in not_delivered:
             # int(dpackage or 0)
-            if distance_in_between(extract_address(trucks.address), extract_address(dpackage.address)) <= next_address:
-                next_address = distance_in_between(extract_address(trucks.address), extract_address(dpackage.address))
+            if distance_in_between(retrieve_address(trucks.address), retrieve_address(dpackage.address)) <= next_address:
+                next_address = distance_in_between(retrieve_address(trucks.address), retrieve_address(dpackage.address))
                 next_package = dpackage
 
         # Adds next closest package to the truck package list
         trucks.packages.append(next_package.id)
         # Removes the same package from the not_delivered list
         not_delivered.remove(next_package)
-        # Takes the mileage driven to this packaged into the truck.mileage attribute
+        # Takes the mileage driven to this package into the truck.mileage attribute
         trucks.mileage += next_address
         # Updates truck's current address attribute to the package it drove to
         truck.address = next_package.address
@@ -154,32 +147,38 @@ delivering_packages(truck3)
 
 class Main:
     # User Interface
-    # Upon running the program, the below message will appear.
-    print("Western Governors University Parcel Service (WGUPS)")
-    print("The mileage for the route is:")
-    print(truck1.mileage + truck2.mileage + truck3.mileage)  # Print total mileage for all trucks
+    # UI for user to interact with the program.
+    print("---------------------------------------------------------------------------------------------------")
+    print("                      Welcome to Western Governors University Parcel Service!                       ")
+    print("---------------------------------------------------------------------------------------------------\n")
+
+    # print(truck1.mileage + truck2.mileage + truck3.mileage)
+    # Print total mileage for all trucks
+    print(f"\nThe total mileage amount for all 3 trucks is {truck1.mileage + truck2.mileage + truck3.mileage} miles.\n")
+    print("---------------------------------------------------------------------------------------------------\n")
+
     # The user will be asked to start the process by entering the word "time"
     text = input("To start please input the word 'time' then click enter (Wrong input will cause the program to quit).")
     # If the user doesn't type "leave" the program will ask for a specific time in regard to checking packages
     if text == "time":
         try:
             # The user will be asked to enter a specific time
-            user_time = input("Please enter a time to check status of package(s). Use the following format, HH:MM:SS")
+            user_time = input("Please enter a time to check status of package(s). Use the following format, HH:MM:SS ")
             (h, m, s) = user_time.split(":")
             convert_timedelta = datetime.timedelta(hours=int(h), minutes=int(m), seconds=int(s))
             # The user will be asked if they want to see the status of all packages or only one
-            second_input = input("To view the status of an individual package please type 'solo'. For a rundown of all"
+            second_input = input("To view the status of an individual package please type 's'. For a rundown of all"
                                  " packages please type 'all'.")
-            # If the user enters "solo" the program will ask for one package ID
-            if second_input == "solo":
+            # If the user enters "s" the program will ask for one package ID
+            if second_input == "s":
                 try:
                     # The user will be asked to input a package ID. Invalid entry will cause the program to quit
-                    solo_input = input("Enter the numeric package ID")
-                    package = myPackage_hash_table.lookup(int(solo_input))
+                    single_input = input("Enter the package ID")
+                    package = myPackage_hash_table.lookup(int(single_input))
                     package.update_status(convert_timedelta)
                     print(str(package))
                 except ValueError:
-                    print("Entry invalid. Closing program.")
+                    print("Invalid Entry. Closing program.")
                     exit()
             # If the user types "all" the program will display all package information at once
             elif second_input == "all":
@@ -189,13 +188,13 @@ class Main:
                         package.update_status(convert_timedelta)
                         print(str(package))
                 except ValueError:
-                    print("Entry invalid. Closing program.")
+                    print("Invalid Entry. Closing program.")
                     exit()
             else:
                 exit()
         except ValueError:
-            print("Entry invalid. Closing program.")
+            print("Invalid Entry. Closing program.")
             exit()
     elif input != "time":
-        print("Entry invalid. Closing program.")
+        print("Invalid Entry. Closing program.")
         exit()
