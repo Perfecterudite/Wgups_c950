@@ -127,7 +127,7 @@ def delivering_packages(trucks):
         # Removes the same package from the not_delivered list
         not_delivered.remove(next_package)
         # Takes the mileage driven to this package into the truck.mileage attribute
-        trucks.mileage += next_address
+        trucks.mile += next_address
         # Updates truck's current address attribute to the package it drove to
         truck.address = next_package.address
         # Updates the time it took for the truck to drive to the nearest package
@@ -154,7 +154,7 @@ class Main:
 
     # print(truck1.mileage + truck2.mileage + truck3.mileage)
     # Print total mileage for all trucks
-    print(f"\nThe total mileage amount for all 3 trucks is {truck1.mileage + truck2.mileage + truck3.mileage} miles.\n")
+    print(f"\nThe total mileage amount for all 3 trucks is {truck1.mile + truck2.mile + truck3.mile} miles.\n")
     print("---------------------------------------------------------------------------------------------------\n")
 
     # The user will be asked to start the process by entering the word "time"
