@@ -107,29 +107,12 @@ for i in truck1.packages:
 
 # Create truck object truck2
 packageNine = myPackage_hash_table.lookup(9)
-#packageNine.address = "410 S State St"
-#myPackage_hash_table.insert(9,packageNine)
-
-# Get the current time
-current_time = datetime.datetime.now().time()
-
-# Set the old (incorrect) address and the new address
-old_address = "300 State St"
-new_address = "410 S State St"
-
-# Check if the current time is less than 10:20 AM
-if current_time < datetime.time(10, 20):
-    # If the current time is before 10:20 AM, use the old (incorrect) address
-    packageNine.address = old_address
-else:
-    # If the current time is at or after 10:20 AM, use the new address
-    packageNine.address = new_address
-
+packageNine.address = "410 S State St"
 # Insert the updated package into the hash table
 myPackage_hash_table.insert(9, packageNine)
-
 truck2 = truck.Truck(16, 18, None, [3, 6, 9, 12, 17, 18, 21, 22, 23, 24, 26, 27, 35, 36, 38], 0.0,
                      "4001 South 700 East", datetime.timedelta(hours=10, minutes=20))
+
 for i in truck2.packages:
     package = myPackage_hash_table.lookup(i)
     package.truck_name = "Truck 2"
@@ -145,7 +128,6 @@ for i in truck3.packages:
     package.truck_name = "Truck 3"
     package.delivery_time = datetime.time
     myPackage_hash_table.insert(i, package)
-
 
 # Function to deliver packages
 # Method for ordering packages on a given truck using the nearest neighbor algorithm
