@@ -17,28 +17,7 @@
             </Attribute>
           </value>
         </entry>
-        <entry key="\Csv_files\distance_data.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\Csv_files\distance_name.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
         <entry key="\Csv_files\packageCSV.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\Csv_files\packages.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
