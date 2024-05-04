@@ -236,12 +236,12 @@ class Main:
                         package.update_status(convert_timedelta)
                         print("ID | address | city | state | zipcode | deadline "
                               "| wt.| status | departure time| delivery time | Truck|")
-                        if package.id == 9 and convert_timedelta > datetime.timedelta(hours=10, minutes=20):
+                        if package.id == 9 and convert_timedelta > datetime.timedelta(hours=10, minutes=20, seconds=00):
                             package.address = "410 S State St"
                         print(str(package))
                     except ValueError:
-                        print("Invalid Entry. Closing program.")
-                        exit()
+                        print("Invalid Entry. Try Again!")
+                       # exit()
                 # If the user types "all" the program will display all package information at once
                 elif num_input == "2":
                     try:
@@ -255,31 +255,32 @@ class Main:
                         for packageID in range(1, 41):
                             package = myPackage_hash_table.lookup(packageID)
                             package.update_status(convert_timedelta)
-                            if package.id == 9 and convert_timedelta > datetime.timedelta(hours=10, minutes=20):
+                            if package.id == 9 and convert_timedelta > datetime.timedelta(hours=10, minutes=20, seconds=00):
                                 package.address = "410 S State St"
                             # print the package info.
                             print(str(package))
                             # print(str(package))
+                        print(
+                            "---------------------------------------------------------------------------------------------------\n")
+                        print("Truck 1 Mileage", truck1.mile)
+                        print("Truck 2 Mileage", truck2.mile)
+                        print("Truck 3 Mileage", truck3.mile)
+                        # Print total mileage for all trucks
+                        print(
+                            f"\nThe total mileage amount for all 3 trucks is {truck1.mile + truck2.mile + truck3.mile} miles.\n")
                     except ValueError:
-                        print("Invalid Entry. Closing program.")
-                        exit()
-                    print(
-                        "---------------------------------------------------------------------------------------------------\n")
-                    print("Truck 1 Mileage", truck1.mile)
-                    print("Truck 2 Mileage", truck2.mile)
-                    print("Truck 3 Mileage", truck3.mile)
-                    # Print total mileage for all trucks
-                    print(
-                        f"\nThe total mileage amount for all 3 trucks is {truck1.mile + truck2.mile + truck3.mile} miles.\n")
+                        print("Invalid Entry. Try Again!")
+                        # exit()
+
                 elif num_input == "3":
                     isExit = False
                     print("Exiting Program now")
                 else:
-                    print("Exiting Program now")
+                    print("Try Again!")
                     # exit()
             except ValueError:
                 print("Invalid Entry. Closing program.")
                 exit()
         elif input != "start":
-            print("Invalid Entry. Closing program.")
+            print("Try Again!")
             # exit()
