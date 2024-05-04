@@ -106,10 +106,13 @@ for i in truck1.packages:
     myPackage_hash_table.insert(i, package)
 
 # Create truck object truck2
-packageNine = myPackage_hash_table.lookup(9)
-packageNine.address = "410 S State St"
+#packageNine = myPackage_hash_table.lookup(9)
+#packageNine.address = "410 S State St"
 # Insert the updated package into the hash table
-myPackage_hash_table.insert(9, packageNine)
+#myPackage_hash_table.insert(9, packageNine)
+# Insert the updated package into the hash table
+#myPackage_hash_table.insert(9, packageNine)
+
 truck2 = truck.Truck(16, 18, None, [3, 6, 9, 12, 17, 18, 21, 22, 23, 24, 26, 27, 35, 36, 38], 0.0,
                      "4001 South 700 East", datetime.timedelta(hours=10, minutes=20))
 
@@ -137,7 +140,7 @@ def delivering_packages(trucks):
     not_delivered = []
     for packageID in trucks.packages:
         packs = myPackage_hash_table.lookup(packageID)
-        #print(packs)
+        # print(packs)
         not_delivered.append(packs)
         # mini_distance(trucks.address, packs.address)
     # Clear the package list of a given truck so the packages can be placed back into the truck in the order
@@ -200,73 +203,83 @@ delivering_packages(truck3)
 class Main:
     # User Interface
     # UI for user to interact with the program.
-    print("---------------------------------------------------------------------------------------------------")
-    print("                      Welcome to Western Governors University Parcel Service!                       ")
-    print("---------------------------------------------------------------------------------------------------\n")
+    isExit = True
+    while(isExit):
+        print("---------------------------------------------------------------------------------------------------")
+        print("                      Welcome to Western Governors University Parcel Service!                       ")
+        print("---------------------------------------------------------------------------------------------------\n")
 
 
-    # The user will be asked to start the process by entering the word "time"
-    text = input("Enter the word 'start' then click enter (Wrong input will cause the program to quit).")
-    # If the user doesn't type "leave" the program will ask for a specific time in regard to checking packages
-    if text == "start":
-        try:
-            print("Please choose from the following options")
-            print("1. Get A Specific package at the given time.")
-            print("2. Get All Packages at the given time.")
-            print("3. Exit the Program")
-            # The user will be asked if they want to see the status of all packages or only one
-            num_input = input("Enter Number ")
-            # If the user enters "s" the program will ask for one package ID
-            if num_input == "1":
-                try:
-                    # The user will be asked to enter a specific time
-                    user_time = input(
-                        "Please enter a time to check status of package(s). Use the following format, HH:MM:SS ")
-                    (h, m, s) = user_time.split(":")
-                    convert_timedelta = datetime.timedelta(hours=int(h), minutes=int(m), seconds=int(s))
-                    # The user will be asked to input a package ID. Invalid entry will cause the program to quit
-                    single_input = input("Enter the package ID ")
-                    package = myPackage_hash_table.lookup(int(single_input))
-                    package.update_status(convert_timedelta)
-                    print("ID | address | city | state | zipcode | deadline "
-                          "| wt.| status | departure time| delivery time | Truck|")
-                    print(str(package))
-                except ValueError:
-                    print("Invalid Entry. Closing program.")
-                    exit()
-            # If the user types "all" the program will display all package information at once
-            elif num_input == "2":
-                try:
-                    # The user will be asked to enter a specific time
-                    user_time = input(
-                        "Please enter a time to check status of package(s). Use the following format, HH:MM:SS ")
-                    (h, m, s) = user_time.split(":")
-                    convert_timedelta = datetime.timedelta(hours=int(h), minutes=int(m), seconds=int(s))
-                    print("ID | address | city | state | zipcode | deadline "
-                          "| wt.| status | departure time| delivery time | Truck|")
-                    for packageID in range(1, 41):
-                        package = myPackage_hash_table.lookup(packageID)
+        # The user will be asked to start the process by entering the word "time"
+        text = input("Enter the word 'start' then click enter (Wrong input will cause the program to quit).")
+        # If the user doesn't type "leave" the program will ask for a specific time in regard to checking packages
+        if text == "start":
+            try:
+                print("Please choose from the following options")
+                print("1. Get A Specific package at the given time.")
+                print("2. Get All Packages at the given time.")
+                print("3. Exit the Program")
+                # The user will be asked if they want to see the status of all packages or only one
+                num_input = input("Enter Number ")
+                # If the user enters "s" the program will ask for one package ID
+                if num_input == "1":
+                    try:
+                        # The user will be asked to enter a specific time
+                        user_time = input(
+                            "Please enter a time to check status of package(s). Use the following format, HH:MM:SS ")
+                        (h, m, s) = user_time.split(":")
+                        convert_timedelta = datetime.timedelta(hours=int(h), minutes=int(m), seconds=int(s))
+
+                        # The user will be asked to input a package ID. Invalid entry will cause the program to quit
+                        single_input = input("Enter the package ID ")
+                        package = myPackage_hash_table.lookup(int(single_input))
                         package.update_status(convert_timedelta)
-                        # print the package info.
+                        print("ID | address | city | state | zipcode | deadline "
+                              "| wt.| status | departure time| delivery time | Truck|")
+                        if package.id == 9 and convert_timedelta > datetime.timedelta(hours=10, minutes=20):
+                            package.address = "410 S State St"
                         print(str(package))
-                        # print(str(package))
-                except ValueError:
-                    print("Invalid Entry. Closing program.")
-                    exit()
-                print(
-                    "---------------------------------------------------------------------------------------------------\n")
-                print("Truck 1 Mileage", truck1.mile)
-                print("Truck 2 Mileage", truck2.mile)
-                print("Truck 3 Mileage", truck3.mile)
-                # Print total mileage for all trucks
-                print(
-                    f"\nThe total mileage amount for all 3 trucks is {truck1.mile + truck2.mile + truck3.mile} miles.\n")
-            else:
-                print("Exiting Program now")
+                    except ValueError:
+                        print("Invalid Entry. Closing program.")
+                        exit()
+                # If the user types "all" the program will display all package information at once
+                elif num_input == "2":
+                    try:
+                        # The user will be asked to enter a specific time
+                        user_time = input(
+                            "Please enter a time to check status of package(s). Use the following format, HH:MM:SS ")
+                        (h, m, s) = user_time.split(":")
+                        convert_timedelta = datetime.timedelta(hours=int(h), minutes=int(m), seconds=int(s))
+                        print("ID | address | city | state | zipcode | deadline "
+                              "| wt.| status | departure time| delivery time | Truck|")
+                        for packageID in range(1, 41):
+                            package = myPackage_hash_table.lookup(packageID)
+                            package.update_status(convert_timedelta)
+                            if package.id == 9 and convert_timedelta > datetime.timedelta(hours=10, minutes=20):
+                                package.address = "410 S State St"
+                            # print the package info.
+                            print(str(package))
+                            # print(str(package))
+                    except ValueError:
+                        print("Invalid Entry. Closing program.")
+                        exit()
+                    print(
+                        "---------------------------------------------------------------------------------------------------\n")
+                    print("Truck 1 Mileage", truck1.mile)
+                    print("Truck 2 Mileage", truck2.mile)
+                    print("Truck 3 Mileage", truck3.mile)
+                    # Print total mileage for all trucks
+                    print(
+                        f"\nThe total mileage amount for all 3 trucks is {truck1.mile + truck2.mile + truck3.mile} miles.\n")
+                elif num_input == "3":
+                    isExit = False
+                    print("Exiting Program now")
+                else:
+                    print("Exiting Program now")
+                    # exit()
+            except ValueError:
+                print("Invalid Entry. Closing program.")
                 exit()
-        except ValueError:
+        elif input != "start":
             print("Invalid Entry. Closing program.")
-            exit()
-    elif input != "time":
-        print("Invalid Entry. Closing program.")
-        exit()
+            # exit()
