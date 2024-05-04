@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="528d7ea8-5f1d-4052-8751-8210afa1e832" name="Changes" comment="trying to fix package 9">
+    <list default="true" id="528d7ea8-5f1d-4052-8751-8210afa1e832" name="Changes" comment="Worked Main exit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hashTable.py" beforeDir="false" afterPath="$PROJECT_DIR$/hashTable.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -183,7 +183,23 @@
       <option name="project" value="LOCAL" />
       <updated>1714709497433</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Fixed package 9 and main menu">
+      <option name="closed" value="true" />
+      <created>1714831395639</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1714831395639</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Worked Main exit">
+      <option name="closed" value="true" />
+      <created>1714832505746</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1714832505746</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -199,17 +215,8 @@
     <MESSAGE value="Added docx files" />
     <MESSAGE value="Fixed large Miles" />
     <MESSAGE value="trying to fix package 9" />
-    <option name="LAST_COMMIT_MESSAGE" value="trying to fix package 9" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/main.py</url>
-          <line>238</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="Fixed package 9 and main menu" />
+    <MESSAGE value="Worked Main exit" />
+    <option name="LAST_COMMIT_MESSAGE" value="Worked Main exit" />
   </component>
 </project>
